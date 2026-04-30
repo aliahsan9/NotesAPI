@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using NotesAPI.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Register Db Here
+builder.Services.AddDbContext<AppDbContext>(options =>
+ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 
