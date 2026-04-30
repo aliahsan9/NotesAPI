@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using static NotesAPI.DTOs.NoteDtos;
 
 namespace NotesAPI.Validators
 {

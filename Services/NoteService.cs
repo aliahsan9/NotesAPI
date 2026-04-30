@@ -5,6 +5,7 @@ using NotesAPI.Entities;
 using NotesAPI.Extensions;
 using NotesAPI.Interafces;
 using static NotesAPI.DTOs.NoteDtos;
+using Serilog;
 
 namespace NotesAPI.Services
 {
@@ -49,16 +50,18 @@ namespace NotesAPI.Services
         }
         public async Task<NoteDto> CreateAsync(CreateNoteDto dto)
         {
+            Log.Information("Creating a new note with title: {Title}", dto.Title);
             var note = new Note
             {
                 Id = Guid.NewGuid(),
                 Title = dto.Title,
                 Content = dto.Content
             };
-            _context.Notes.AddAsync(note);
+            _context.Notes.Add(note);
             await _context.SaveChangesAsync();
+            Log.Information("Note created successfully with Title: {title}", dto.Title);
             return note.ToDto();
-        }
+        } 
         public async Task<bool> UpdateAsync(Guid Id, UpdateNoteDto dto)
         {
             var note = await _context.Notes.FindAsync(Id);

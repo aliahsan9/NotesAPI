@@ -5,8 +5,21 @@ using Microsoft.EntityFrameworkCore;
 using NotesAPI.Data;
 using NotesAPI.Interafces;
 using NotesAPI.Services;
+using Serilog;
+
+
+// Adding Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+// Registe Serilog
+builder.Host.UseSerilog();
 
 // Register Db Here
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -35,6 +48,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Configure Serilog
+app.UseSerilogRequestLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
