@@ -19,10 +19,10 @@ namespace NotesAPI.Services
             var notes = await _context.Notes.ToListAsync();
             return notes.Select(n => n.ToDto());
         }
-        public async Task<NoteDto?> GetbyIdAsync(Guid Id)
+        public async Task<NoteDto> GetByIdAsync(Guid Id)
         {
             var note = await _context.Notes.FindAsync(Id);
-            return note?.ToDto();
+            return note.ToDto();
         }
         public async Task<NoteDto> CreateAsync(CreateNoteDto dto)
         {

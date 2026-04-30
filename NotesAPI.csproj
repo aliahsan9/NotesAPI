@@ -17,13 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="Interafces\" />
-    <Folder Include="Extensions\" />
     <Folder Include="Middleware\" />
-    <Folder Include="Validators\" />
     <Folder Include="Services\" />
+    <Folder Include="Validators\" />
   </ItemGroup>
 
 </Project> 

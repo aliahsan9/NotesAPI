@@ -28,7 +28,7 @@ namespace NotesAPI.Controllers
             return Ok(note);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Guid id, CreateNoteDto dto)
+        public async Task<IActionResult> Create(CreateNoteDto dto)
         {
             var created = await _service.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
