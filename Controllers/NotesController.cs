@@ -15,9 +15,11 @@ namespace NotesAPI.Controllers
             _service = service;
         }
         [HttpGet] 
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromBody] QueryParameters query)
         {
-            return Ok(await _service.GetAllAsync());
+            var result = await _service.GetAllAsync(query);
+
+            return Ok(result);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)

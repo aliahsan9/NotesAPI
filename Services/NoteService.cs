@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NotesAPI.Data;
+using NotesAPI.DTOs;
 using NotesAPI.Entities;
 using NotesAPI.Extensions;
 using NotesAPI.Interafces;
@@ -14,9 +15,31 @@ namespace NotesAPI.Services
         {
             _context = context;
         }
-        public async Task <IEnumerable<NoteDto>> GetAllAsync()
+        public async Task <IEnumerable<NoteDto>> GetAllAsync(QueryParameters query)
         {
-            var notes = await _context.Notes.ToListAsync();
+            var notesQuery = _context.Notes.AsQueryable();
+
+
+            // Filtering
+            if(!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                notesQuery = notesQuery.Where(n =>
+                n.Title.Contains(query.SearchTerm));
+            }
+            // Sorting
+            notesQuery = query.SortBy?.ToLower() switch
+            {
+                "title" => query.IsDecending
+                ? notesQuery.OrderByDescending(n => n.CreatedAt)
+                : notesQuery.OrderBy(n => n.CreatedAt)
+            };
+
+            // Pagination
+            var notes = await notesQuery
+            .Skip((query.PageNumber - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .ToListAsync();
+
             return notes.Select(n => n.ToDto());
         }
         public async Task<NoteDto> GetByIdAsync(Guid Id)
