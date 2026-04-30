@@ -1,3 +1,6 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NotesAPI.Data;
 using NotesAPI.Interafces;
@@ -14,6 +17,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<INoteService, NoteService>();
 
 builder.Services.AddControllers();
+
+// Configure Fluent Validation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+
+// Cleaner Validation Responses
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = false;
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
